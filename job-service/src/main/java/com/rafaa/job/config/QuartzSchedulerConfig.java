@@ -16,7 +16,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 
-@Configuration
+//@Configuration
 public class QuartzSchedulerConfig {
 
     @Autowired
@@ -63,6 +63,5 @@ public class QuartzSchedulerConfig {
         propertiesFactoryBean.afterPropertiesSet();
         return propertiesFactoryBean.getObject();
     }
-
 
 }
