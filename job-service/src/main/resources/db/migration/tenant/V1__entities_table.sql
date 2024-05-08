@@ -1,13 +1,13 @@
 
 CREATE TABLE car_park (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY,
     car_park_number VARCHAR(255) NOT NULL UNIQUE,
     timezone VARCHAR(255),
     car_park_name VARCHAR(255)
 );
 
 CREATE TABLE facility (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY,
     car_park_id UUID REFERENCES car_park(id),
     location_id VARCHAR(255) UNIQUE,
     facility_type VARCHAR(255),
@@ -18,7 +18,7 @@ CREATE TABLE facility (
 );
 
 CREATE TABLE counter (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY,
     category VARCHAR(255),
     available INTEGER,
     capacity INTEGER,
@@ -27,7 +27,7 @@ CREATE TABLE counter (
 );
 
 CREATE TABLE contingent (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY,
     name VARCHAR(255),
     value INTEGER,
     start_date DATE,
@@ -35,5 +35,3 @@ CREATE TABLE contingent (
     day_of_week VARCHAR(255),
     counter_id UUID REFERENCES counter(id)
 );
-
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
