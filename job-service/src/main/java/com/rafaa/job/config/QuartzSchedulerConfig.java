@@ -1,17 +1,16 @@
-package com.rafaa.config;
+package com.rafaa.job.config;
 
 import java.io.IOException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import com.rafaa.service.JobsListener;
-import com.rafaa.service.TriggerListner;
+import com.rafaa.job.service.JobsListener;
+import com.rafaa.job.service.TriggerListner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 

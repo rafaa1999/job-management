@@ -1,4 +1,4 @@
-package com.rafaa.config;
+package com.rafaa.job.config;
 
 import java.text.ParseException;
 

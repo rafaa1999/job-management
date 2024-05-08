@@ -1,9 +1,9 @@
-package com.rafaa.job;
+package com.rafaa.job.jobs;
 
 import java.util.List;
 import java.util.Map;
 
-import com.rafaa.service.JobService;
+import com.rafaa.job.service.JobService;
 import org.quartz.InterruptableJob;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;

@@ -1,4 +1,4 @@
-package com.rafaa.util;
+package com.rafaa.job.util;
 
 
 public class ServerResponseCode {

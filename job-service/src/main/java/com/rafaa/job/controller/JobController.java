@@ -1,14 +1,14 @@
-package com.rafaa.controller;
+package com.rafaa.job.controller;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.rafaa.dto.ServerResponse;
-import com.rafaa.job.CronJob;
-import com.rafaa.job.SimpleJob;
-import com.rafaa.service.JobService;
-import com.rafaa.util.ServerResponseCode;
+import com.rafaa.job.dto.ServerResponse;
+import com.rafaa.job.jobs.CronJob;
+import com.rafaa.job.jobs.SimpleJob;
+import com.rafaa.job.service.JobService;
+import com.rafaa.job.util.ServerResponseCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

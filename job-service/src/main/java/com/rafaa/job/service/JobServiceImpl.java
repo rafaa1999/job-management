@@ -1,4 +1,4 @@
-package com.rafaa.service;
+package com.rafaa.job.service;
 
 import java.util.ArrayList;
 import java.util.Date;

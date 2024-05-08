@@ -1,4 +1,19 @@
+
 spring:
+  application:
+    name: job-service
   flyway:
     locations: classpath:db/migration/default
     schemas: default
+
+multitenancy:
+  tenants:
+    - identifier: google
+      enabled: true
+      schema: GOOGLE
+    - identifier: meta
+      enabled: true
+      schema: META
+    - identifier: apple
+      enabled: false
+      schema: APPLE

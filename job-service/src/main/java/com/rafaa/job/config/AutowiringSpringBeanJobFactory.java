@@ -1,4 +1,4 @@
-package com.rafaa.config;
+package com.rafaa.job.config;
 
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;

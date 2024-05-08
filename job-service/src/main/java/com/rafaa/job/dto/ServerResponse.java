@@ -1,4 +1,4 @@
-package com.rafaa.dto;
+package com.rafaa.job.dto;
 
 
 public class ServerResponse {

@@ -1,4 +1,4 @@
-package com.rafaa.service;
+package com.rafaa.job.service;
 
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

@@ -1,9 +1,9 @@
-package com.rafaa.service;
+package com.rafaa.job.service;
 
 import java.text.ParseException;
 import java.util.Date;
 
-import com.rafaa.config.PersistableCronTriggerFactoryBean;
+import com.rafaa.job.config.PersistableCronTriggerFactoryBean;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
