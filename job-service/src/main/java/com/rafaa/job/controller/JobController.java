@@ -9,6 +9,7 @@ import com.rafaa.job.jobs.CronJob;
 import com.rafaa.job.jobs.SimpleJob;
 import com.rafaa.job.service.JobService;
 import com.rafaa.job.util.ServerResponseCode;
+import com.rafaa.multitenancy.context.TenantContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 
 @RestController
@@ -36,6 +36,8 @@ public class JobController {
                                    @RequestParam("cronExpression") String cronExpression){
         log.info("JobController.schedule()");
 
+        // TODO : ADD TENANT IDENTIFIER TO THE JOB NAME => JOB FOR EACH TENANT
+
         // Job Name is mandatory
         if(jobName == null || jobName.trim().equals("")){
             return getServerResponse(ServerResponseCode.JOB_NAME_NOT_PRESENT, false);
@@ -44,9 +46,14 @@ public class JobController {
         // Check if job Name is unique;
         if(!jobService.isJobWithNamePresent(jobName)){
 
+            // TODO : DELETE THIS AFTER TESTING
+            String tenantIdentifier = TenantContextHolder.getTenantIdentifier();
+            String jobName_tenant = jobName + "_" + tenantIdentifier;
+
             if(cronExpression == null || cronExpression.trim().equals("")){
                 // Single Trigger
-                boolean status = jobService.scheduleOneTimeJob(jobName, SimpleJob.class, jobScheduleTime);
+//                boolean status = jobService.scheduleOneTimeJob(jobName, SimpleJob.class, jobScheduleTime);
+                boolean status = jobService.scheduleOneTimeJob(jobName_tenant, SimpleJob.class, jobScheduleTime);
                 if(status){
                     return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
                 }else{

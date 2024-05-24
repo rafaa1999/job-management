@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.filter.ServerHttpObservationFilter;
 
-@Component
+//@Component
 public class TenantContextFilter extends OncePerRequestFilter {
 
     private final HttpHeaderTenantResolver httpRequestTenantResolver;
@@ -40,6 +40,7 @@ public class TenantContextFilter extends OncePerRequestFilter {
             configureLogs(tenantIdentifier);
             configureTraces(tenantIdentifier, request);
         } else {
+            System.out.println(TenantContextHolder.getTenantIdentifier());
             throw new TenantResolutionException("A valid tenant must be specified for requests to %s".formatted(request.getRequestURI()));
         }
 

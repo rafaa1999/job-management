@@ -24,10 +24,10 @@ public class CounterRestController {
         this.counterService = counterService;
     }
 
-    @GetMapping("/facility/{facility_id}")
-    public ResponseEntity<List<Counter>> getCountersByFacilityId(@PathVariable("facility_id") UUID facility_id){
-       log.info("CounterRestController.getCountersByFacilityID()");
-       return ResponseEntity.ok(counterService.getAllCounterByFacilityId(facility_id));
-    }
+//    @GetMapping("/facility/{facility_id}")
+//    public ResponseEntity<List<Counter>> getCountersByFacilityId(@PathVariable("facility_id") UUID facility_id){
+//       log.info("CounterRestController.getCountersByFacilityID()");
+//       return ResponseEntity.ok(counterService.getAllCounterByFacilityId(facility_id));
+//    }
 
 }

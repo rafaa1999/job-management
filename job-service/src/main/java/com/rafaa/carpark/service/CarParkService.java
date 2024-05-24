@@ -38,4 +38,11 @@ public class CarParkService {
         return  carPark.get();
     }
 
+    public List<CarPark> getCarParks(){
+        log.info("Request received to get all car parks");
+        List<CarPark> carParks = carParkRepository.findAll();
+        log.info("Returing car parks: {}", carParks);
+        return carParks;
+    }
+
 }

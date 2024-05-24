@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-
 import com.rafaa.multitenancy.tenantdetails.TenantDetailsService;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
@@ -38,9 +37,13 @@ public class ConnectionProvider implements MultiTenantConnectionProvider<String>
     public Connection getConnection(String tenantIdentifier) throws SQLException {
         var tenantDetails = tenantDetailsService.loadTenantByIdentifier(tenantIdentifier);
         var schema = tenantDetails != null ? tenantDetails.schema() : tenantIdentifier;
+        System.out.println("schema ==========================================");
+        System.out.println(schema);
+        System.out.println("==========================================");
 
         Connection connection = dataSource.getConnection();
         connection.setSchema(schema);
+//        connection.setSchema(tenantIdentifier);
         return connection;
     }
 

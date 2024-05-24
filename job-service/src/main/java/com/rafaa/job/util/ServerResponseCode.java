@@ -3,7 +3,7 @@ package com.rafaa.job.util;
 
 public class ServerResponseCode {
 
-    //SPECIFIC ERROR CODES
+    // SPECIFIC ERROR CODES
     public static final int JOB_WITH_SAME_NAME_EXIST = 501;
     public static final int JOB_NAME_NOT_PRESENT = 502;
 
@@ -14,9 +14,9 @@ public class ServerResponseCode {
 
     public static final int JOB_DOESNT_EXIST = 500;
 
-    //GENERIC ERROR
+    // GENERIC ERROR
     public static final int ERROR = 600;
 
-    //SUCCESS CODES
+    // SUCCESS CODES
     public static final int SUCCESS = 200;
 }

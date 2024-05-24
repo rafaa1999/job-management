@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 public interface JobService {
+
     boolean scheduleOneTimeJob(String jobName, Class<? extends QuartzJobBean> jobClass, Date date);
     boolean scheduleCronJob(String jobName, Class<? extends QuartzJobBean> jobClass, Date date, String cronExpression);
 
@@ -23,4 +24,5 @@ public interface JobService {
     boolean isJobWithNamePresent(String jobName);
     String getJobState(String jobName);
     boolean stopJob(String jobName);
+
 }

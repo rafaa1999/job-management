@@ -12,7 +12,7 @@ public class PersistableCronTriggerFactoryBean extends CronTriggerFactoryBean {
     public void afterPropertiesSet() throws ParseException{
         super.afterPropertiesSet();
 
-        //Remove the JobDetail element
+        // Remove the JobDetail element
         getJobDataMap().remove(JOB_DETAIL_KEY);
     }
 }

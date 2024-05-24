@@ -8,12 +8,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class HttpHeaderTenantResolver implements TenantResolver<HttpServletRequest> {
 
-    private static final String TENANT_HEADER = "X-TenantId";
+//    private static final String TENANT_HEADER = "X-TenantId";
+    private static final String TENANT_PARAMETER = "tenantId";
 
     @Override
     @Nullable
     public String resolveTenantIdentifier(HttpServletRequest request) {
-        return request.getHeader(TENANT_HEADER);
+        return request.getParameter(TENANT_PARAMETER);
+//        return request.getHeader(TENANT_HEADER);
     }
 
 }
