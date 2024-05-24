@@ -6,7 +6,7 @@ import lombok.*;
 
 import java.util.UUID;
 
-//@Entity
+@Entity
 @Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor @Builder
 public class Counter {
     @Id
@@ -17,7 +17,6 @@ public class Counter {
     private Integer capacity;
     private Integer occupied;
     @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "facility_id")
-    @JoinColumn(name = "facilityId")
+    @JoinColumn(name = "facility_id")
     private Facility facility;
 }

@@ -8,7 +8,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.UUID;
 
-//@Entity
+@Entity
 @Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor @Builder
 public class Contingent {
     @Id
@@ -16,14 +16,13 @@ public class Contingent {
     private UUID id;
     private String name;
     private Integer value;
-//    @Column(name = "start_date")
+    @Column(name = "start_date")
     private LocalDate startDate;
-//    @Column(name = "end_date")
+    @Column(name = "end_date")
     private LocalDate endDate;
-//    @Column(name = "day_of_week")
+    @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
     @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "counter_id")
-    @JoinColumn(name = "counterId")
+    @JoinColumn(name = "counter_id")
     private Counter counter;
 }
