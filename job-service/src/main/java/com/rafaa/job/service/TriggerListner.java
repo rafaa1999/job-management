@@ -30,7 +30,6 @@ public class TriggerListner implements TriggerListener {
         System.out.println("TriggerListner.triggerMisfired()");
         String jobName = trigger.getJobKey().getName();
         System.out.println("Job name: " + jobName + " is misfired");
-
     }
 
     @Override

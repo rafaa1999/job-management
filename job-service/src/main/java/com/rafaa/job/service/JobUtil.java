@@ -2,6 +2,7 @@ package com.rafaa.job.service;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.UUID;
 
 import com.rafaa.job.config.PersistableCronTriggerFactoryBean;
 import org.quartz.JobDataMap;

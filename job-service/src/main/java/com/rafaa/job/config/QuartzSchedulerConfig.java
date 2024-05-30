@@ -41,7 +41,7 @@ public class QuartzSchedulerConfig {
         factory.setDataSource(dataSource);
         factory.setQuartzProperties(quartzProperties());
 
-        //Register listeners to get notification on Trigger misfire etc
+        // Register listeners to get notification on Trigger misfire etc
         factory.setGlobalTriggerListeners(triggerListner);
         factory.setGlobalJobListeners(jobsListener);
 

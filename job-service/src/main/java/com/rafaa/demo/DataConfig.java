@@ -10,18 +10,12 @@ import com.rafaa.facility.entity.Facility;
 import com.rafaa.facility.enums.FacilityType;
 import com.rafaa.facility.repository.FacilityRepository;
 import com.rafaa.multitenancy.context.TenantContextHolder;
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.IntStream;
 
 @Configuration(proxyBeanMethods = false)
 public class DataConfig {
@@ -43,53 +37,143 @@ public class DataConfig {
 
         TenantContextHolder.setTenantIdentifier("meta");
         if(carParkRepository.count() == 0){
+
             CarPark carPark_one = CarPark.builder()
                     .carParkName("nisan")
                     .carParkNumber("#_6")
                     .timezone("Roma/Europa")
                     .build();
+
             CarPark carPark_two = CarPark.builder()
                     .carParkName("reno")
                     .carParkNumber("#_9")
                     .timezone("Madrid/Europa")
                     .build();
-            carParkRepository.saveAll(List.of(carPark_one,carPark_two));
+
+            CarPark carPark_three = CarPark.builder()
+                    .carParkName("honda")
+                    .carParkNumber("#_2")
+                    .timezone("Valencia/Europa")
+                    .build();
+
+            CarPark carPark_four = CarPark.builder()
+                    .carParkName("T5")
+                    .carParkNumber("#_7")
+                    .timezone("Lisbon/Europa")
+                    .build();
+
+            CarPark carPark_five = CarPark.builder()
+                    .carParkName("F1")
+                    .carParkNumber("#_12")
+                    .timezone("London/Europa")
+                    .build();
+
+            CarPark carPark_six = CarPark.builder()
+                    .carParkName("RS4")
+                    .carParkNumber("#_8")
+                    .timezone("Paris/Europa")
+                    .build();
+
+            carParkRepository.saveAll(List.of(carPark_one,carPark_two,carPark_three,carPark_four,carPark_five,carPark_six));
 
             Facility facility_one = Facility.builder()
                     .carPark(carPark_one)
-                    .locationId("first_row")
-                    .facilityType(FacilityType.PARKING_GARAGES)
+                    .locationId("SB2222.2222.020222")
+                    .facilityType(FacilityType.PARKING_LOTS)
                     .facilityNumber("12")
-                    .facilityName("orange")
-                    .description("this facility is for orange group")
+                    .facilityName("facility_12")
+                    .description("The number of this facility is 12")
                     .isDeleted(false)
                     .build();
+
+//            SB1111.1111.010111
             Facility facility_two = Facility.builder()
                     .carPark(carPark_one)
-                    .locationId("second_row")
+                    .locationId("SB1111.1111.010111")
                     .facilityType(FacilityType.PARKING_GARAGES)
                     .facilityNumber("43")
-                    .facilityName("orange")
+                    .facilityName("facility_two")
                     .description("this facility is for orange group")
                     .isDeleted(false)
                     .build();
 
-            facilityRepository.saveAll(List.of(facility_one,facility_two));
+            Facility facility_three = Facility.builder()
+                    .carPark(carPark_one)
+                    .locationId("SB3333.3333.030333")
+                    .facilityType(FacilityType.PARKING_GARAGES)
+                    .facilityNumber("47")
+                    .facilityName("facility_three")
+                    .description("this facility is for orange group")
+                    .isDeleted(false)
+                    .build();
+
+            Facility facility_four = Facility.builder()
+                    .carPark(carPark_one)
+                    .locationId("SB4444.4444.040444")
+                    .facilityType(FacilityType.PARKING_GARAGES)
+                    .facilityNumber("33")
+                    .facilityName("facility_four")
+                    .description("this facility is for orange group")
+                    .isDeleted(false)
+                    .build();
+
+            Facility facility_five = Facility.builder()
+                    .carPark(carPark_one)
+                    .locationId("SB5555.5555.050555")
+                    .facilityType(FacilityType.PARKING_GARAGES)
+                    .facilityNumber("67")
+                    .facilityName("facility_five")
+                    .description("this facility is for orange group")
+                    .isDeleted(false)
+                    .build();
+
+            Facility facility_six = Facility.builder()
+                    .carPark(carPark_one)
+                    .locationId("SB6666.6666.060666")
+                    .facilityType(FacilityType.PARKING_GARAGES)
+                    .facilityNumber("57")
+                    .facilityName("facility_six")
+                    .description("this facility is for orange group")
+                    .isDeleted(false)
+                    .build();
+
+            facilityRepository.saveAll(List.of(facility_one,facility_two,facility_three,facility_four,facility_five,facility_six));
 
             Counter counter_reserved = Counter.builder()
                     .category("Reserved")
+                    .capacity(200)
+                    .occupied(50)
+                    .available(50)
+//                    .occupied(50)
+//                    .available(150)
                     .facility(facility_one)
                     .build();
+
             Counter counter_non_reserved = Counter.builder()
                     .category("Non_Reserved")
+                    .capacity(400)
+                    .occupied(100)
+                    .available(50)
+//                    .occupied(200)
+//                    .available(200)
                     .facility(facility_one)
                     .build();
+
             Counter counter_pre_booked = Counter.builder()
                     .category("Pre_Booked")
+                    .capacity(400)
+                    .occupied(200)
+                    .available(50)
+//                    .occupied(250)
+//                    .available(150)
                     .facility(facility_one)
                     .build();
+
             Counter counter_physic = Counter.builder()
                     .category("Physic")
+                    .capacity(1000)
+                    .occupied(350)
+                    .available(150)
                     .facility(facility_one)
                     .build();
 
