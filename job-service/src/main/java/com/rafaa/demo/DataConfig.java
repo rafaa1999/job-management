@@ -74,7 +74,34 @@ public class DataConfig {
                     .timezone("Paris/Europa")
                     .build();
 
-            carParkRepository.saveAll(List.of(carPark_one,carPark_two,carPark_three,carPark_four,carPark_five,carPark_six));
+
+            CarPark carPark_seven = CarPark.builder()
+                    .carParkName("RS4")
+                    .carParkNumber("#_21")
+                    .timezone("Paris/Europa")
+                    .build();
+
+            CarPark carPark_eight = CarPark.builder()
+                    .carParkName("RS4")
+                    .carParkNumber("#_22")
+                    .timezone("Paris/Europa")
+                    .build();
+
+            CarPark carPark_nine = CarPark.builder()
+                    .carParkName("RS4")
+                    .carParkNumber("#_23")
+                    .timezone("Roma/Europa")
+                    .build();
+
+            CarPark carPark_ten = CarPark.builder()
+                    .carParkName("RS4")
+                    .carParkNumber("#_24")
+                    .timezone("Roma/Europa")
+                    .build();
+
+            carParkRepository.saveAll(List.of(carPark_one,carPark_two,carPark_three,
+                    carPark_four,carPark_five,carPark_six,carPark_seven,carPark_eight,carPark_nine,
+                    carPark_ten));
 
             Facility facility_one = Facility.builder()
                     .carPark(carPark_one)

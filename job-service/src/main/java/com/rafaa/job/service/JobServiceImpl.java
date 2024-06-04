@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.rafaa.multitenancy.context.TenantContextHolder;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
@@ -25,6 +26,8 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 
+import static org.quartz.TriggerKey.triggerKey;
+
 
 @Service
 public class JobServiceImpl implements JobService{
@@ -32,11 +35,16 @@ public class JobServiceImpl implements JobService{
     @Autowired
     @Lazy
     SchedulerFactoryBean schedulerFactoryBean;
+    private final TriggerListner triggerListner;
 
     @Autowired
     private ApplicationContext context;
 
     private static final Logger log = LoggerFactory.getLogger(JobServiceImpl.class);
+
+    public JobServiceImpl(TriggerListner triggerListner) {
+        this.triggerListner = triggerListner;
+    }
 
     /**
      * Schedule a job by jobName at given date.
@@ -46,7 +54,7 @@ public class JobServiceImpl implements JobService{
         log.info("Request received to scheduleJob");
 
 
-        String jobKey = jobName;
+        String jobKey = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
         String groupKey = "SampleGroup";
         String triggerKey = jobName;
 
@@ -58,6 +66,7 @@ public class JobServiceImpl implements JobService{
 
         try {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
+//            scheduler.getListenerManager().addTriggerListener(triggerListner,triggerKey("myTriggerName", "myTriggerGroup"));
             Date dt = scheduler.scheduleJob(jobDetail, cronTriggerBean);
             log.info("Job with key jobKey : {} and group : {} scheduled successfully for date : {}",jobKey,groupKey,dt);
             return true;
@@ -113,7 +122,7 @@ public class JobServiceImpl implements JobService{
             //Trigger newTrigger = JobUtil.createSingleTrigger(jobKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
             Trigger newTrigger = JobUtil.createSingleTrigger(jobKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
 
-            Date dt = schedulerFactoryBean.getScheduler().rescheduleJob(TriggerKey.triggerKey(jobKey), newTrigger);
+            Date dt = schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey(jobKey), newTrigger);
             log.info("Trigger associated with jobKey : {} rescheduled successfully for date : {}",jobKey,dt);
             return true;
         } catch ( Exception e ) {
@@ -137,7 +146,7 @@ public class JobServiceImpl implements JobService{
             //Trigger newTrigger = JobUtil.createSingleTrigger(jobKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
             Trigger newTrigger = JobUtil.createCronTrigger(jobKey, date, cronExpression, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
 
-            Date dt = schedulerFactoryBean.getScheduler().rescheduleJob(TriggerKey.triggerKey(jobKey), newTrigger);
+            Date dt = schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey(jobKey), newTrigger);
             log.info("Trigger associated with jobKey : {} rescheduled successfully for date : {}",jobKey,dt);
             return true;
         } catch ( Exception e ) {

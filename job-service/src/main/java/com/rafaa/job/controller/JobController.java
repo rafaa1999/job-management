@@ -6,10 +6,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.rafaa.JobServiceApplication;
+import com.rafaa.carpark.entity.CarPark;
 import com.rafaa.counter.entity.Counter;
 import com.rafaa.counter.repository.CounterRepository;
 import com.rafaa.counter.service.CounterService;
 import com.rafaa.facility.entity.Facility;
+import com.rafaa.facility.repository.FacilityRepository;
 import com.rafaa.facility.service.FacilityService;
 import com.rafaa.job.dto.ServerResponse;
 import com.rafaa.job.jobs.CapacityJob;
@@ -41,11 +43,13 @@ public class JobController {
     private static final Logger log = LoggerFactory.getLogger(JobController.class);
     private final CounterService counterService;
     private final CounterRepository counterRepository;
+    private final FacilityRepository facilityRepository;
 
 
-    public JobController(CounterService counterService, CounterRepository counterRepository) {
+    public JobController(CounterService counterService, CounterRepository counterRepository, FacilityRepository facilityRepository) {
         this.counterService = counterService;
         this.counterRepository = counterRepository;
+        this.facilityRepository = facilityRepository;
     }
 
     @RequestMapping("schedule/{id}")
@@ -64,6 +68,11 @@ public class JobController {
 
         JobServiceApplication.tenant = tenantId;
         JobServiceApplication.facilityId = id;
+
+        CarPark carPark = facilityRepository.findById(id).get().getCarPark();
+//        3B82F6
+
+        System.out.println(carPark);
 
 //        System.out.println("======== : I want to get the id from the front end");
 //        System.out.println(id);
