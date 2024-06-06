@@ -25,10 +25,13 @@ public class CarParkRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CarPark>> getAllCarPark(@RequestHeader("X-TenantId") String tenantId
-                                                       ,@RequestParam(name = "name", required = false) String name,
-                                                       @RequestParam(name = "timezone", required = false) String timezone){
-       TenantContextHolder.setTenantIdentifier(tenantId);
+//    public ResponseEntity<List<CarPark>> getAllCarPark(@RequestHeader("X-TenantId") String tenantId
+//                                                       ,@RequestParam(name = "name", required = false) String name,
+//                                                       @RequestParam(name = "timezone", required = false) String timezone){
+        public ResponseEntity<List<CarPark>> getAllCarPark(
+                @RequestParam(name = "name", required = false) String name,
+                @RequestParam(name = "timezone", required = false) String timezone){
+//       TenantContextHolder.setTenantIdentifier(tenantId);
        log.info("CarParkRestController.getAllCarPark()");
        return ResponseEntity.ok(carParkService.getAllCarParks(name,timezone));
     }

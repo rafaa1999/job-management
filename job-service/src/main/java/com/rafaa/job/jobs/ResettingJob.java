@@ -72,6 +72,11 @@ public class ResettingJob extends QuartzJobBean implements InterruptableJob {
         System.out.println(localDateTime_berlin);
         System.out.println(localDateTime_tunisia);
 
+        boolean check = berlin.getRules().getOffset(LocalDateTime.now()).getTotalSeconds()
+                == paris.getRules().getOffset( LocalDateTime.now() ).getTotalSeconds();
+
+        System.out.println(check);
+
         for(CarPark c : carParks){
            if(c.getTimezone().equals(carPark.getTimezone())){
               carParksWithSameTimezone.add(c);

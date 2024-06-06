@@ -57,6 +57,7 @@ public class JobController {
                                    @RequestParam("jobName") String jobName,
                                    @RequestParam("jobScheduleTime") @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") Date jobScheduleTime,
                                    @RequestParam("cronExpression") String cronExpression,
+                                   @RequestParam(name = "expirationTime",required = false) @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") Date expirationTime,
                                    @RequestParam("tenantId") String tenantId
                                    ){
         log.info("JobController.schedule()");
@@ -65,12 +66,17 @@ public class JobController {
         System.out.println(jobScheduleTime);
         System.out.println(cronExpression);
         System.out.println(tenantId);
+        System.out.println("======");
+        System.out.println(expirationTime);
 
         JobServiceApplication.tenant = tenantId;
         JobServiceApplication.facilityId = id;
 
         CarPark carPark = facilityRepository.findById(id).get().getCarPark();
 //        3B82F6
+
+//        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + carPark.getCarParkName() + "_" + jobName;
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
         System.out.println(carPark);
 
@@ -104,14 +110,16 @@ public class JobController {
 
                 // TODO: delete what is tagged
                     if(jobName.equals("resetting")){
-                        boolean status = jobService.scheduleOneTimeJob(jobName, ResettingJob.class, jobScheduleTime);
+//                        boolean status = jobService.scheduleOneTimeJob(jobName, ResettingJob.class, jobScheduleTime);
+                        boolean status = jobService.scheduleOneTimeJob(carParkJobName, ResettingJob.class, jobScheduleTime);
                         if(status){
                             return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
                         }else{
                             return getServerResponse(ServerResponseCode.ERROR, false);
                         }
                     }else if(jobName.equals("capacity")){
-                        boolean status = jobService.scheduleOneTimeJob(jobName, CapacityJob.class, jobScheduleTime);
+//                        boolean status = jobService.scheduleOneTimeJob(jobName, CapacityJob.class, jobScheduleTime);
+                        boolean status = jobService.scheduleOneTimeJob(carParkJobName, CapacityJob.class, jobScheduleTime);
                         if(status){
                             return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
                         }else{
@@ -133,14 +141,16 @@ public class JobController {
 
                 // TODO: delete what is tagged
                     if(jobName.equals("resetting")){
-                        boolean status = jobService.scheduleCronJob(jobName, ResettingJob.class, jobScheduleTime, cronExpression);
+//                        boolean status = jobService.scheduleCronJob(jobName, ResettingJob.class, jobScheduleTime, cronExpression);
+                        boolean status = jobService.scheduleCronJob(carParkJobName, ResettingJob.class, jobScheduleTime, cronExpression);
                         if(status){
                             return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
                         }else{
                             return getServerResponse(ServerResponseCode.ERROR, false);
                         }
                     }else if(jobName.equals("capacity")){
-                        boolean status = jobService.scheduleCronJob(jobName, CapacityJob.class, jobScheduleTime, cronExpression);
+//                        boolean status = jobService.scheduleCronJob(jobName, CapacityJob.class, jobScheduleTime, cronExpression);
+                        boolean status = jobService.scheduleCronJob(carParkJobName, CapacityJob.class, jobScheduleTime, cronExpression);
                         if(status){
                             return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
                         }else{
@@ -155,6 +165,7 @@ public class JobController {
                 }else{
                     return getServerResponse(ServerResponseCode.ERROR, false);
                 }
+
             }
         }else{
             return getServerResponse(ServerResponseCode.JOB_WITH_SAME_NAME_EXIST, false);
@@ -164,7 +175,9 @@ public class JobController {
     @RequestMapping("unschedule")
     public void unschedule(@RequestParam("jobName") String jobName) {
         log.info("JobController.unschedule()");
-        jobService.unScheduleJob(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
+//        jobService.unScheduleJob(jobName);
+        jobService.unScheduleJob(carParkJobName);
     }
 
     @RequestMapping("delete")
@@ -172,12 +185,16 @@ public class JobController {
         log.info("JobController.delete()");
 
         System.out.println(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
-        if(jobService.isJobWithNamePresent(jobName)){
-            boolean isJobRunning = jobService.isJobRunning(jobName);
+//        if(jobService.isJobWithNamePresent(jobName)){
+            if(jobService.isJobWithNamePresent(carParkJobName)){
+//            boolean isJobRunning = jobService.isJobRunning(jobName);
+            boolean isJobRunning = jobService.isJobRunning(carParkJobName);
 
             if(!isJobRunning){
-                boolean status = jobService.deleteJob(jobName);
+//                boolean status = jobService.deleteJob(jobName);
+                boolean status = jobService.deleteJob(carParkJobName);
                 if(status){
                     return getServerResponse(ServerResponseCode.SUCCESS, true);
                 }else{
@@ -197,13 +214,17 @@ public class JobController {
         log.info("JobController.pause()");
 
         System.out.println(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
-        if(jobService.isJobWithNamePresent(jobName)){
+//        if(jobService.isJobWithNamePresent(jobName)){
+            if(jobService.isJobWithNamePresent(carParkJobName)){
 
-            boolean isJobRunning = jobService.isJobRunning(jobName);
+//            boolean isJobRunning = jobService.isJobRunning(jobName);
+                boolean isJobRunning = jobService.isJobRunning(carParkJobName);
 
             if(!isJobRunning){
-                boolean status = jobService.pauseJob(jobName);
+//                boolean status = jobService.pauseJob(jobName);
+                boolean status = jobService.pauseJob(carParkJobName);
                 if(status){
                     return getServerResponse(ServerResponseCode.SUCCESS, true);
                 }else{
@@ -224,13 +245,17 @@ public class JobController {
         log.info("JobController.resume()");
 
         System.out.println(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
-        if(jobService.isJobWithNamePresent(jobName)){
-            String jobState = jobService.getJobState(jobName);
+//        if(jobService.isJobWithNamePresent(jobName)){
+            if(jobService.isJobWithNamePresent(carParkJobName)){
+//            String jobState = jobService.getJobState(jobName);
+                String jobState = jobService.getJobState(carParkJobName);
 
             if(jobState.equals("PAUSED")){
                 log.info("Job current state is PAUSED, Resuming job...");
-                boolean status = jobService.resumeJob(jobName);
+//                boolean status = jobService.resumeJob(jobName);
+                boolean status = jobService.resumeJob(carParkJobName);
 
                 if(status){
                     return getServerResponse(ServerResponseCode.SUCCESS, true);
@@ -258,6 +283,7 @@ public class JobController {
         System.out.println(jobScheduleTime);
 
         System.out.println(cronExpression);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
         // Job Name is mandatory
         if(jobName == null || jobName.trim().equals("")){
@@ -265,11 +291,13 @@ public class JobController {
         }
 
         // Edit Job
-        if(jobService.isJobWithNamePresent(jobName)){
+//        if(jobService.isJobWithNamePresent(jobName)){
+            if(jobService.isJobWithNamePresent(carParkJobName)){
 
             if(cronExpression == null || cronExpression.trim().equals("")){
                 // Single Trigger
-                boolean status = jobService.updateOneTimeJob(jobName, jobScheduleTime);
+//                boolean status = jobService.updateOneTimeJob(jobName, jobScheduleTime);
+                boolean status = jobService.updateOneTimeJob(carParkJobName, jobScheduleTime);
                 if(status){
                     return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
                 }else{
@@ -278,7 +306,8 @@ public class JobController {
 
             }else{
                 // Cron Trigger
-                boolean status = jobService.updateCronJob(jobName, jobScheduleTime, cronExpression);
+//                boolean status = jobService.updateCronJob(jobName, jobScheduleTime, cronExpression);
+                boolean status = jobService.updateCronJob(carParkJobName, jobScheduleTime, cronExpression);
                 if(status){
                     return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
                 }else{
@@ -295,6 +324,7 @@ public class JobController {
     @RequestMapping("jobs")
     public ServerResponse getAllJobs(){
         log.info("JobController.getAllJobs()");
+        String tenantIdentifier = TenantContextHolder.getTenantIdentifier();
 
         List<Map<String, Object>> list = jobService.getAllJobs();
         return getServerResponse(ServerResponseCode.SUCCESS, list);
@@ -305,6 +335,7 @@ public class JobController {
         log.info("JobController.checkJobName()");
 
         System.out.println(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
 //Job Name is mandatory
         if(jobName == null || jobName.trim().equals("")){
@@ -316,7 +347,8 @@ public class JobController {
 
 //        System.out.println(jobName_tenant);
 
-        boolean status = jobService.isJobWithNamePresent(jobName);
+//        boolean status = jobService.isJobWithNamePresent(jobName);
+        boolean status = jobService.isJobWithNamePresent(carParkJobName);
         return getServerResponse(ServerResponseCode.SUCCESS, status);
     }
 
@@ -325,8 +357,10 @@ public class JobController {
         log.info("JobController.isJobRunning()");
 
         System.out.println(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
-        boolean status = jobService.isJobRunning(jobName);
+//        boolean status = jobService.isJobRunning(jobName);
+        boolean status = jobService.isJobRunning(carParkJobName);
         return getServerResponse(ServerResponseCode.SUCCESS, status);
     }
 
@@ -335,8 +369,10 @@ public class JobController {
         log.info("JobController.getJobState()");
 
         System.out.println(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
-        String jobState = jobService.getJobState(jobName);
+//        String jobState = jobService.getJobState(jobName);
+        String jobState = jobService.getJobState(carParkJobName);
         return getServerResponse(ServerResponseCode.SUCCESS, jobState);
     }
 
@@ -345,11 +381,14 @@ public class JobController {
         log.info("JobController.stopJob()");
 
         System.out.println(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
-        if(jobService.isJobWithNamePresent(jobName)){
+//        if(jobService.isJobWithNamePresent(jobName)){
+            if(jobService.isJobWithNamePresent(carParkJobName)){
 
             if(jobService.isJobRunning(jobName)){
-                boolean status = jobService.stopJob(jobName);
+//                boolean status = jobService.stopJob(jobName);
+                boolean status = jobService.stopJob(carParkJobName);
                 if(status){
                     return getServerResponse(ServerResponseCode.SUCCESS, true);
                 }else{
@@ -373,11 +412,15 @@ public class JobController {
         log.info("JobController.startJobNow()");
 
         System.out.println(jobName);
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
 
-        if(jobService.isJobWithNamePresent(jobName)){
+//        if(jobService.isJobWithNamePresent(jobName)){
+            if(jobService.isJobWithNamePresent(carParkJobName)){
 
-            if(!jobService.isJobRunning(jobName)){
-                boolean status = jobService.startJobNow(jobName);
+//            if(!jobService.isJobRunning(jobName)){
+                if(!jobService.isJobRunning(carParkJobName)){
+//                boolean status = jobService.startJobNow(jobName);
+                    boolean status = jobService.startJobNow(carParkJobName);
 
                 if(status){
                     // Success

@@ -54,7 +54,8 @@ public class JobServiceImpl implements JobService{
         log.info("Request received to scheduleJob");
 
 
-        String jobKey = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
+//        String jobKey = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
+        String jobKey = jobName;
         String groupKey = "SampleGroup";
         String triggerKey = jobName;
 
