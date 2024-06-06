@@ -22,7 +22,7 @@ public interface JobService {
     boolean resumeJob(String jobName);
     boolean startJobNow(String jobName);
     boolean isJobRunning(String jobName);
-    List<Map<String, Object>> getAllJobs();
+    List<Map<String, Object>> getAllJobs(String tenantIdentifier);
     boolean isJobWithNamePresent(String jobName);
     String getJobState(String jobName);
     boolean stopJob(String jobName);

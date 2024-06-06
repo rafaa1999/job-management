@@ -113,7 +113,8 @@ public class JobController {
 //                        boolean status = jobService.scheduleOneTimeJob(jobName, ResettingJob.class, jobScheduleTime);
                         boolean status = jobService.scheduleOneTimeJob(carParkJobName, ResettingJob.class, jobScheduleTime);
                         if(status){
-                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+//                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs(TenantContextHolder.getTenantIdentifier()));
                         }else{
                             return getServerResponse(ServerResponseCode.ERROR, false);
                         }
@@ -121,7 +122,8 @@ public class JobController {
 //                        boolean status = jobService.scheduleOneTimeJob(jobName, CapacityJob.class, jobScheduleTime);
                         boolean status = jobService.scheduleOneTimeJob(carParkJobName, CapacityJob.class, jobScheduleTime);
                         if(status){
-                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+//                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs(TenantContextHolder.getTenantIdentifier()));
                         }else{
                             return getServerResponse(ServerResponseCode.ERROR, false);
                         }
@@ -131,7 +133,8 @@ public class JobController {
                 boolean status = jobService.scheduleOneTimeJob(jobName, SimpleJob.class, jobScheduleTime);
 //                boolean status = jobService.scheduleOneTimeJob(jobName, SimpleJob.class, jobScheduleTime);
                 if(status){
-                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+//                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs(TenantContextHolder.getTenantIdentifier()));
                 }else{
                     return getServerResponse(ServerResponseCode.ERROR, false);
                 }
@@ -144,7 +147,8 @@ public class JobController {
 //                        boolean status = jobService.scheduleCronJob(jobName, ResettingJob.class, jobScheduleTime, cronExpression);
                         boolean status = jobService.scheduleCronJob(carParkJobName, ResettingJob.class, jobScheduleTime, cronExpression);
                         if(status){
-                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+//                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs(TenantContextHolder.getTenantIdentifier()));
                         }else{
                             return getServerResponse(ServerResponseCode.ERROR, false);
                         }
@@ -152,7 +156,8 @@ public class JobController {
 //                        boolean status = jobService.scheduleCronJob(jobName, CapacityJob.class, jobScheduleTime, cronExpression);
                         boolean status = jobService.scheduleCronJob(carParkJobName, CapacityJob.class, jobScheduleTime, cronExpression);
                         if(status){
-                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+//                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+                            return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs(TenantContextHolder.getTenantIdentifier()));
                         }else{
                             return getServerResponse(ServerResponseCode.ERROR, false);
                         }
@@ -161,7 +166,8 @@ public class JobController {
 
                 boolean status = jobService.scheduleCronJob(jobName, CronJob.class, jobScheduleTime, cronExpression);
                 if(status){
-                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+//                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs(TenantContextHolder.getTenantIdentifier()));
                 }else{
                     return getServerResponse(ServerResponseCode.ERROR, false);
                 }
@@ -299,7 +305,8 @@ public class JobController {
 //                boolean status = jobService.updateOneTimeJob(jobName, jobScheduleTime);
                 boolean status = jobService.updateOneTimeJob(carParkJobName, jobScheduleTime);
                 if(status){
-                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+//                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs(TenantContextHolder.getTenantIdentifier()));
                 }else{
                     return getServerResponse(ServerResponseCode.ERROR, false);
                 }
@@ -309,7 +316,8 @@ public class JobController {
 //                boolean status = jobService.updateCronJob(jobName, jobScheduleTime, cronExpression);
                 boolean status = jobService.updateCronJob(carParkJobName, jobScheduleTime, cronExpression);
                 if(status){
-                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+//                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs());
+                    return getServerResponse(ServerResponseCode.SUCCESS, jobService.getAllJobs(TenantContextHolder.getTenantIdentifier()));
                 }else{
                     return getServerResponse(ServerResponseCode.ERROR, false);
                 }
@@ -325,8 +333,11 @@ public class JobController {
     public ServerResponse getAllJobs(){
         log.info("JobController.getAllJobs()");
         String tenantIdentifier = TenantContextHolder.getTenantIdentifier();
+        System.out.println("#)))$)#)$)#)$#)$)#)$)#$)#)$#)$$)#)$)#");
+        System.out.println(tenantIdentifier);
 
-        List<Map<String, Object>> list = jobService.getAllJobs();
+//        List<Map<String, Object>> list = jobService.getAllJobs();
+        List<Map<String, Object>> list = jobService.getAllJobs(tenantIdentifier);
         return getServerResponse(ServerResponseCode.SUCCESS, list);
     }
 

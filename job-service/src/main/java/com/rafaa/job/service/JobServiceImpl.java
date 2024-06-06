@@ -309,7 +309,7 @@ public class JobServiceImpl implements JobService{
      * Get all jobs
      */
     @Override
-    public List<Map<String, Object>> getAllJobs() {
+    public List<Map<String, Object>> getAllJobs(String tenantIdentifier) {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         try {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
@@ -327,18 +327,41 @@ public class JobServiceImpl implements JobService{
                     Date lastFiredTime = triggers.get(0).getPreviousFireTime();
 
                     Map<String, Object> map = new HashMap<String, Object>();
-                    map.put("jobName", jobName);
-                    map.put("groupName", jobGroup);
-                    map.put("scheduleTime", scheduleTime);
-                    map.put("lastFiredTime", lastFiredTime);
-                    map.put("nextFireTime", nextFireTime);
 
-                    if(isJobRunning(jobName)){
-                        map.put("jobStatus", "RUNNING");
-                    }else{
-                        String jobState = getJobState(jobName);
-                        map.put("jobStatus", jobState);
+                    String[] tabs = jobName.split("_");
+                    System.out.println("#$#($*#(*$#^$#^$#!@!&@^!&@^&^&^&^#$#$(*%(*");
+                    System.out.println(tabs[0]);
+                    System.out.println(tabs[1]);
+
+                    if(tabs[0].equals(tenantIdentifier)){
+                        map.put("jobName", jobName);
+                        map.put("groupName", jobGroup);
+                        map.put("scheduleTime", scheduleTime);
+                        map.put("lastFiredTime", lastFiredTime);
+                        map.put("nextFireTime", nextFireTime);
+
+                        if(isJobRunning(jobName)){
+                            map.put("jobStatus", "RUNNING");
+                        }else{
+                            String jobState = getJobState(jobName);
+                            map.put("jobStatus", jobState);
+                        }
+                        list.add(map);
+
                     }
+
+//                    map.put("jobName", jobName);
+//                    map.put("groupName", jobGroup);
+//                    map.put("scheduleTime", scheduleTime);
+//                    map.put("lastFiredTime", lastFiredTime);
+//                    map.put("nextFireTime", nextFireTime);
+//
+//                    if(isJobRunning(jobName)){
+//                        map.put("jobStatus", "RUNNING");
+//                    }else{
+//                        String jobState = getJobState(jobName);
+//                        map.put("jobStatus", jobState);
+//                    }
 
 					/*					Date currentDate = new Date();
 					if (scheduleTime.compareTo(currentDate) > 0) {
@@ -351,7 +374,7 @@ public class JobServiceImpl implements JobService{
 						map.put("jobStatus", "Running");
 					}*/
 
-                    list.add(map);
+//                    list.add(map);
                     log.info("Job details:");
                     log.info("Job Name: {}, Group Name: {} + , Schedule Time: {}",jobName,groupName,scheduleTime);
                 }
