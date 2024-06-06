@@ -35,3 +35,11 @@ CREATE TABLE contingent (
     day_of_week VARCHAR(255),
     counter_id UUID REFERENCES counter(id)
 );
+
+CREATE TABLE shedlock(
+    name VARCHAR(64) NOT NULL,
+    lock_until TIMESTAMP NOT NULL,
+    locked_at TIMESTAMP NOT NULL,
+    locked_by VARCHAR(255) NOT NULL,
+    PRIMARY KEY (name)
+);

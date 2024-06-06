@@ -12,6 +12,7 @@ import com.rafaa.facility.repository.FacilityRepository;
 import com.rafaa.facility.service.FacilityService;
 import com.rafaa.job.service.GlobalObject;
 import com.rafaa.multitenancy.context.TenantContextHolder;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.quartz.InterruptableJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -42,6 +43,7 @@ public class ResettingJob extends QuartzJobBean implements InterruptableJob {
     }
 
     @Override
+    @SchedulerLock(name = "ResettingJob", lockAtMostFor = "15s", lockAtLeastFor = "15s")
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         System.out.println("this is the resetting job is running");
         System.out.println("================= : this the facility id");

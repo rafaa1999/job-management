@@ -4,12 +4,19 @@ import com.rafaa.job.config.AutowiringSpringBeanJobFactory;
 import com.rafaa.job.service.JobsListener;
 import com.rafaa.job.service.TriggerListner;
 import com.rafaa.multitenancy.web.TenantInterceptor;
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -23,8 +30,11 @@ import java.util.Arrays;
 import java.util.Properties;
 
 @Configuration
+@EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "1m")
 public class WebConfig implements WebMvcConfigurer {
 
+    private final Logger log = LoggerFactory.getLogger(WebConfig.class);
     private final TenantInterceptor tenantInterceptor;
 
     public WebConfig(TenantInterceptor tenantInterceptor) {
@@ -42,6 +52,20 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:4200")  // Allow requests from this origin
                 .allowedMethods("GET", "POST", "PUT", "DELETE")  // Allowed HTTP methods
                 .allowedHeaders("Content-Type", "X-TenantId");  // Allowed headers
+    }
+
+    @Bean
+    public LockProvider lockProvider(DataSource dataSource) {
+//        System.out.println("()()(#$#$#)($#*&&@#@");
+//        System.out.println("create a lock provider");
+//        return new JdbcTemplateLockProvider(
+//                JdbcTemplateLockProvider.Configuration.builder()
+//                        .withJdbcTemplate(new JdbcTemplate(dataSource))
+//                        .usingDbTime()
+//                        .build()
+//        );
+        log.debug("Instantiate LockProvider bean ..");
+        return new MultiTenancyLockProvider();
     }
 
 //    @Autowired

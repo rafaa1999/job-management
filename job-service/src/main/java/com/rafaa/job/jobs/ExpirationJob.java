@@ -2,6 +2,7 @@ package com.rafaa.job.jobs;
 
 import com.rafaa.facility.repository.FacilityRepository;
 import com.rafaa.job.service.JobService;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.quartz.InterruptableJob;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -18,6 +19,7 @@ public class ExpirationJob extends QuartzJobBean implements InterruptableJob{
     }
 
     @Override
+    @SchedulerLock(name = "ExpirationJob", lockAtMostFor = "15s", lockAtLeastFor = "15s")
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
     }
 
