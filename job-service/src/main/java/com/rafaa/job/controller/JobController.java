@@ -58,6 +58,9 @@ public class JobController {
                                    @RequestParam("jobScheduleTime") @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") Date jobScheduleTime,
                                    @RequestParam("cronExpression") String cronExpression,
                                    @RequestParam(name = "expirationTime",required = false) @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") Date expirationTime,
+                                   @RequestParam(name = "jobCheckedFail", required = false) boolean jobCheckedFail,
+                                   @RequestParam(name = "jobCheckedSuccedAfterFailed", required = false) boolean jobCheckedSuccedAfterFailed,
+                                   @RequestParam(name = "jobCheckedManyFailures", required = false) boolean jobCheckedManyFailures,
                                    @RequestParam("tenantId") String tenantId
                                    ){
         log.info("JobController.schedule()");
@@ -68,6 +71,12 @@ public class JobController {
         System.out.println(tenantId);
         System.out.println("======");
         System.out.println(expirationTime);
+
+        System.out.println("^#%%#^^^^^^^^^@^^#$$");
+        System.out.println(jobCheckedFail);
+        System.out.println(jobCheckedSuccedAfterFailed);
+        System.out.println(jobCheckedManyFailures);
+
 
         JobServiceApplication.tenant = tenantId;
         JobServiceApplication.facilityId = id;
@@ -470,6 +479,7 @@ public class JobController {
 
     @RequestMapping("/simulation/add/{id}")
     public ServerResponse simulationAdd(@PathVariable UUID id){
+        log.info("JobController.simulationAdd()");
         Counter counter = counterRepository.findById(id).get();
         Facility facility = counter.getFacility();
         counter.setOccupied(counter.getOccupied() + 1);
@@ -489,6 +499,7 @@ public class JobController {
 
     @RequestMapping("/simulation/delete/{id}")
     public ServerResponse simulationDelete(@PathVariable UUID id){
+        log.info("JobController.simulationDelete()");
         Counter counter = counterRepository.findById(id).get();
         Facility facility = counter.getFacility();
         counter.setAvailable(counter.getAvailable() + 1);
@@ -505,5 +516,12 @@ public class JobController {
         counterRepository.save(phyCounter);
         return getServerResponse(ServerResponseCode.SUCCESS, true);
     }
+
+//    @RequestMapping("/details")
+//    public ServerResponse jobDetails(@RequestParam("jobName") String jobName){
+//        log.info("JobController.jobDetails()");
+//        System.out.println(jobName);
+//        return getServerResponse(ServerResponseCode.SUCCESS,true);
+//    }
 
 }

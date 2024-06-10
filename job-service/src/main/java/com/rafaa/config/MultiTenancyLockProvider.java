@@ -52,7 +52,7 @@ public class MultiTenancyLockProvider implements LockProvider {
     private DataSource getDataSource(String tenantName) {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUrl("jdbc:postgresql://localhost:5432/shedlock?currentSchema=" + tenantName);
-        dataSource.setUsername(System.getenv().getOrDefault("db_username", "rafaa"));
+        dataSource.setUsername(System.getenv().getOrDefault("db_username", "postgres"));
         dataSource.setPassword(System.getenv().getOrDefault("db_password", "1999"));
         dataSource.setDriverClassName("org.postgresql.Driver");
         return dataSource;

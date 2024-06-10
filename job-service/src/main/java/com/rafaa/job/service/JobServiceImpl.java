@@ -1,11 +1,12 @@
 package com.rafaa.job.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.util.*;
 
+import com.rafaa.JobServiceApplication;
+import com.rafaa.carpark.entity.CarPark;
+import com.rafaa.facility.entity.Facility;
+import com.rafaa.facility.repository.FacilityRepository;
 import com.rafaa.multitenancy.context.TenantContextHolder;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -40,6 +41,10 @@ public class JobServiceImpl implements JobService{
     @Autowired
     private ApplicationContext context;
 
+
+    @Autowired
+    public FacilityRepository facilityRepository;
+
     private static final Logger log = LoggerFactory.getLogger(JobServiceImpl.class);
 
     public JobServiceImpl(TriggerListner triggerListner) {
@@ -61,8 +66,15 @@ public class JobServiceImpl implements JobService{
 
         JobDetail jobDetail = JobUtil.createJob(jobClass, false, context, jobKey, groupKey);
 
+        UUID facilityId = JobServiceApplication.facilityId;
+        Facility facility = facilityRepository.findById(facilityId).get();
+        CarPark carPark = facility.getCarPark();
+        String timezone = carPark.getTimezone();
+        ZoneId zoneId = ZoneId.of(timezone);
+
         log.info("creating trigger for key : {} at date : {}",jobKey,date);
-        Trigger cronTriggerBean = JobUtil.createSingleTrigger(triggerKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+//        Trigger cronTriggerBean = JobUtil.createSingleTrigger(triggerKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+        Trigger cronTriggerBean = JobUtil.createSingleTrigger(triggerKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW,zoneId);
         //Trigger cronTriggerBean = JobUtil.createSingleTrigger(triggerKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
 
         try {
@@ -92,8 +104,14 @@ public class JobServiceImpl implements JobService{
 
         JobDetail jobDetail = JobUtil.createJob(jobClass, false, context, jobKey, groupKey);
 
+        UUID facilityId = JobServiceApplication.facilityId;
+        Facility facility = facilityRepository.findById(facilityId).get();
+        CarPark carPark = facility.getCarPark();
+        String timezone = carPark.getTimezone();
+        ZoneId zoneId = ZoneId.of(timezone);
+
         log.info("creating trigger for key : {} at date : {}",jobKey,date);
-        Trigger cronTriggerBean = JobUtil.createCronTrigger(triggerKey, date, cronExpression, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+        Trigger cronTriggerBean = JobUtil.createCronTrigger(triggerKey, date, cronExpression, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW,zoneId);
 
         try {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
@@ -118,10 +136,17 @@ public class JobServiceImpl implements JobService{
 
         String jobKey = jobName;
 
+        UUID facilityId = JobServiceApplication.facilityId;
+        Facility facility = facilityRepository.findById(facilityId).get();
+        CarPark carPark = facility.getCarPark();
+        String timezone = carPark.getTimezone();
+        ZoneId zoneId = ZoneId.of(timezone);
+
         log.info("Parameters received for updating one time job : jobKey : {}, date: {}",jobKey,date);
         try {
             //Trigger newTrigger = JobUtil.createSingleTrigger(jobKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
-            Trigger newTrigger = JobUtil.createSingleTrigger(jobKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+//            Trigger newTrigger = JobUtil.createSingleTrigger(jobKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+            Trigger newTrigger = JobUtil.createSingleTrigger(jobKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW,zoneId);
 
             Date dt = schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey(jobKey), newTrigger);
             log.info("Trigger associated with jobKey : {} rescheduled successfully for date : {}",jobKey,dt);
@@ -142,10 +167,16 @@ public class JobServiceImpl implements JobService{
 
         String jobKey = jobName;
 
+        UUID facilityId = JobServiceApplication.facilityId;
+        Facility facility = facilityRepository.findById(facilityId).get();
+        CarPark carPark = facility.getCarPark();
+        String timezone = carPark.getTimezone();
+        ZoneId zoneId = ZoneId.of(timezone);
+
         log.info("Parameters received for updating cron job : jobKey : {}, date: {}",jobKey,date);
         try {
             //Trigger newTrigger = JobUtil.createSingleTrigger(jobKey, date, SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
-            Trigger newTrigger = JobUtil.createCronTrigger(jobKey, date, cronExpression, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
+            Trigger newTrigger = JobUtil.createCronTrigger(jobKey, date, cronExpression, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW,zoneId);
 
             Date dt = schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey(jobKey), newTrigger);
             log.info("Trigger associated with jobKey : {} rescheduled successfully for date : {}",jobKey,dt);

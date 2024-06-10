@@ -58,32 +58,43 @@ public class ResettingJob extends QuartzJobBean implements InterruptableJob {
         CarPark carPark = facilityRepository.findById(JobServiceApplication.facilityId).get().getCarPark();
 //        System.out.println(carPark);
 
+        List<Facility> facilities = facilityService.getFacilitiesByCarParkId(carPark.getId());
+
+        for(Facility f : facilities){
+            List<Counter> counters = counterService.getAllCounterByFacilityId(f.getId());
+            for(Counter c : counters){
+                c.setAvailable(c.getCapacity());
+                c.setOccupied(0);
+                counterRepository.save(c);
+            }
+        }
+
         ZoneId paris = ZoneId.of("Europe/Paris");
         ZoneId berlin = ZoneId.of("Europe/Berlin");
         ZoneId tunisia = ZoneId.of("Africa/Tunis");
 
-        System.out.println(paris);
-        System.out.println(berlin);
-        System.out.println(tunisia);
+//        System.out.println(paris);
+//        System.out.println(berlin);
+//        System.out.println(tunisia);
 
         LocalDateTime localDateTime_paris = LocalDateTime.now(paris);
         LocalDateTime localDateTime_berlin = LocalDateTime.now(berlin);
         LocalDateTime localDateTime_tunisia = LocalDateTime.now(tunisia);
 
-        System.out.println(localDateTime_paris);
-        System.out.println(localDateTime_berlin);
-        System.out.println(localDateTime_tunisia);
+//        System.out.println(localDateTime_paris);
+//        System.out.println(localDateTime_berlin);
+//        System.out.println(localDateTime_tunisia);
 
-        boolean check = berlin.getRules().getOffset(LocalDateTime.now()).getTotalSeconds()
-                == paris.getRules().getOffset( LocalDateTime.now() ).getTotalSeconds();
+//        boolean check = berlin.getRules().getOffset(LocalDateTime.now()).getTotalSeconds()
+//                == paris.getRules().getOffset( LocalDateTime.now() ).getTotalSeconds();
 
-        System.out.println(check);
+//        System.out.println(check);
 
-        for(CarPark c : carParks){
-           if(c.getTimezone().equals(carPark.getTimezone())){
-              carParksWithSameTimezone.add(c);
-           }
-        }
+//        for(CarPark c : carParks){
+//           if(c.getTimezone().equals(carPark.getTimezone())){
+//              carParksWithSameTimezone.add(c);
+//           }
+//        }
 
 //        System.out.println(carParksWithSameTimezone);
 
@@ -92,12 +103,15 @@ public class ResettingJob extends QuartzJobBean implements InterruptableJob {
 //
 //        System.out.println(facility);
 //        System.out.println(facility.getFacilityName());
-        List<Counter> counters = counterService.getAllCounterByFacilityId(JobServiceApplication.id);
-        for(Counter c: counters){
-           c.setAvailable(c.getCapacity());
-           c.setOccupied(0);
-           counterRepository.save(c);
-        }
+
+//        List<Counter> counters = counterService.getAllCounterByFacilityId(JobServiceApplication.id);
+//        System.out.println("#$#(#$&%&)-2324#%");
+//        System.out.println(counters);
+//        for(Counter c: counters){
+//           c.setAvailable(c.getCapacity());
+//           c.setOccupied(0);
+//           counterRepository.save(c);
+//        }
 
 //        for(Counter c: counters){
 //            System.out.println(c);

@@ -1,5 +1,6 @@
 package com.rafaa;
 
+import com.rafaa.facility.repository.FacilityRepository;
 import com.rafaa.multitenancy.context.TenantContextHolder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,7 @@ public class JobServiceApplication {
     public static UUID id;
     public static String tenant;
     public static UUID facilityId;
+    public static FacilityRepository facilityRepository;
     public static void main(String[] args) {
         SpringApplication.run(JobServiceApplication.class);
     }
