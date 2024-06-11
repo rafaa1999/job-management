@@ -43,3 +43,9 @@ CREATE TABLE shedlock(
     locked_by VARCHAR(255) NOT NULL,
     PRIMARY KEY (name)
 );
+
+CREATE TABLE history (
+    id UUID PRIMARY KEY,
+    job_name VARCHAR(255),
+    status VARCHAR(255)
+);

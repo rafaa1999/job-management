@@ -85,7 +85,7 @@ public class JobController {
 //        3B82F6
 
 //        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + carPark.getCarParkName() + "_" + jobName;
-        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName + "_" + carPark.getId();
 
         System.out.println(carPark);
 
@@ -274,8 +274,8 @@ public class JobController {
 
                 if(status){
                     return getServerResponse(ServerResponseCode.SUCCESS, true);
-                }else{
-                    return getServerResponse(ServerResponseCode.ERROR, false);
+            }else{
+                return getServerResponse(ServerResponseCode.ERROR, false);
                 }
             }else{
                 return getServerResponse(ServerResponseCode.JOB_NOT_IN_PAUSED_STATE, false);
@@ -355,7 +355,15 @@ public class JobController {
         log.info("JobController.checkJobName()");
 
         System.out.println(jobName);
-        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName;
+        UUID facilityId = JobServiceApplication.facilityId;
+
+        if(facilityId == null){
+            return getServerResponse(ServerResponseCode.JOB_NAME_NOT_PRESENT, false);
+        }
+
+        CarPark carPark = facilityRepository.findById(JobServiceApplication.facilityId).get().getCarPark();
+
+        String carParkJobName = TenantContextHolder.getTenantIdentifier() + "_" + jobName + "_" + carPark.getId();
 
 //Job Name is mandatory
         if(jobName == null || jobName.trim().equals("")){
@@ -446,8 +454,7 @@ public class JobController {
                     // Success
                     return getServerResponse(ServerResponseCode.SUCCESS, true);
 
-                }else{
-                    // Server error
+                }else{ // Server error
                     return getServerResponse(ServerResponseCode.ERROR, false);
                 }
 

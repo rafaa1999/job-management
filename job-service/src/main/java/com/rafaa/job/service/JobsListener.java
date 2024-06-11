@@ -1,12 +1,20 @@
 package com.rafaa.job.service;
 
+import com.rafaa.JobServiceApplication;
+import com.rafaa.job.dto.History;
+import com.rafaa.multitenancy.context.TenantContextHolder;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JobsListener implements JobListener{
+
+    @Autowired
+    public HistoryRepository historyRepository;
+
 
     @Override
     public String getName() {
@@ -16,7 +24,14 @@ public class JobsListener implements JobListener{
     @Override
     public void jobToBeExecuted(JobExecutionContext context) {
         System.out.println("JobsListener.jobToBeExecuted()");
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        TenantContextHolder.setTenantIdentifier(JobServiceApplication.tenant);
+        System.out.println(TenantContextHolder.getTenantIdentifier());
+        String jobName = context.getJobDetail().getKey().getName();
+        History history = History.builder()
+                .jobName(jobName)
+                .build();
+        System.out.println(history);
+        historyRepository.save(history);
     }
 
     @Override

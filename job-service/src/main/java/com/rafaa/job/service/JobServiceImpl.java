@@ -7,6 +7,7 @@ import com.rafaa.JobServiceApplication;
 import com.rafaa.carpark.entity.CarPark;
 import com.rafaa.facility.entity.Facility;
 import com.rafaa.facility.repository.FacilityRepository;
+import com.rafaa.job.dto.History;
 import com.rafaa.multitenancy.context.TenantContextHolder;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
@@ -41,9 +42,14 @@ public class JobServiceImpl implements JobService{
     @Autowired
     private ApplicationContext context;
 
+    @Autowired
+    public JobsListener jobsListener;
 
     @Autowired
     public FacilityRepository facilityRepository;
+
+    @Autowired
+    public HistoryRepository historyRepository;
 
     private static final Logger log = LoggerFactory.getLogger(JobServiceImpl.class);
 
@@ -80,6 +86,7 @@ public class JobServiceImpl implements JobService{
         try {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
 //            scheduler.getListenerManager().addTriggerListener(triggerListner,triggerKey("myTriggerName", "myTriggerGroup"));
+            scheduler.getListenerManager().addJobListener(jobsListener);
             Date dt = scheduler.scheduleJob(jobDetail, cronTriggerBean);
             log.info("Job with key jobKey : {} and group : {} scheduled successfully for date : {}",jobKey,groupKey,dt);
             return true;
@@ -116,8 +123,13 @@ public class JobServiceImpl implements JobService{
         try {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
             Date dt = scheduler.scheduleJob(jobDetail, cronTriggerBean);
-            JobsListener jobsListener = new JobsListener();
+//            JobsListener jobsListener = new JobsListener();
             scheduler.getListenerManager().addJobListener(jobsListener);
+//            History history = History.builder()
+//                    .jobName(jobName)
+//                    .build();
+//            historyRepository.save(history);
+//            System.out.println(history);
             System.out.println("Job with key jobKey :"+jobKey+ " and group :"+groupKey+ " scheduled successfully for date :"+dt);
             log.info("Job with key jobKey : {} and group : {} scheduled successfully for date : {} ",jobKey,groupKey,dt);
             return true;
