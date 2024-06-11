@@ -116,6 +116,8 @@ public class JobServiceImpl implements JobService{
         try {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
             Date dt = scheduler.scheduleJob(jobDetail, cronTriggerBean);
+            JobsListener jobsListener = new JobsListener();
+            scheduler.getListenerManager().addJobListener(jobsListener);
             System.out.println("Job with key jobKey :"+jobKey+ " and group :"+groupKey+ " scheduled successfully for date :"+dt);
             log.info("Job with key jobKey : {} and group : {} scheduled successfully for date : {} ",jobKey,groupKey,dt);
             return true;

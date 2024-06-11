@@ -16,6 +16,7 @@ public class JobsListener implements JobListener{
     @Override
     public void jobToBeExecuted(JobExecutionContext context) {
         System.out.println("JobsListener.jobToBeExecuted()");
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
     @Override
@@ -26,6 +27,8 @@ public class JobsListener implements JobListener{
     @Override
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
         System.out.println("JobsListener.jobWasExecuted()");
+        System.out.println("==========================================================");
+        System.out.println(context.getJobDetail().getKey().getName());
     }
 
 }

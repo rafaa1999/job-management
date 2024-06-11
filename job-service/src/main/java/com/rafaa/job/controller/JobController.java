@@ -20,6 +20,7 @@ import com.rafaa.job.jobs.ResettingJob;
 import com.rafaa.job.jobs.SimpleJob;
 import com.rafaa.job.service.GlobalObject;
 import com.rafaa.job.service.JobService;
+import com.rafaa.job.service.JobsListener;
 import com.rafaa.job.util.ServerResponseCode;
 import com.rafaa.multitenancy.context.TenantContextHolder;
 import org.slf4j.Logger;
@@ -76,7 +77,6 @@ public class JobController {
         System.out.println(jobCheckedFail);
         System.out.println(jobCheckedSuccedAfterFailed);
         System.out.println(jobCheckedManyFailures);
-
 
         JobServiceApplication.tenant = tenantId;
         JobServiceApplication.facilityId = id;
