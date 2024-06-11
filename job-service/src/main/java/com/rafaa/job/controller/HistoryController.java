@@ -29,7 +29,7 @@ public class HistoryController {
     }
 
     @GetMapping("/{jobName}")
-    public History getHistoryByJobName(@PathVariable(name = "jobName") String jobName){
+    public List<History> getHistoryByJobName(@PathVariable(name = "jobName") String jobName){
         log.info("HistoryController.getHistoryByJobName()");
         return historyService.getHistoryByJobName(jobName);
     }
