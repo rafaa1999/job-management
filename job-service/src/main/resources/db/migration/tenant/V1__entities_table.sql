@@ -47,5 +47,8 @@ CREATE TABLE shedlock(
 CREATE TABLE history (
     id UUID PRIMARY KEY,
     job_name VARCHAR(255),
-    status VARCHAR(255)
+    status VARCHAR(255),
+    scheduled_fire_time VARCHAR(255),
+    previous_fire_time VARCHAR(255),
+    next_fire_time VARCHAR(255)
 );
