@@ -1,6 +1,4 @@
--- thanks to patrick lightbody for submitting this...
---
--- in your quartz properties file, you'll need to set
+
 -- org.quartz.jobstore.driverdelegateclass = org.quartz.impl.jdbcjobstore.postgresqldelegate
 
 drop table if exists qrtz_fired_triggers;

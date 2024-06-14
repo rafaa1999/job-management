@@ -16,11 +16,11 @@ public class Facility {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_park_id")
     private CarPark carPark;
-    @Column(name = "location_id",unique = true)
+//    @Column(name = "location_id",unique = true)
     private String locationId;
     @Column(name = "facility_type")
     private FacilityType facilityType;
-    @Column(name = "facility_number",unique = true)
+//    @Column(name = "facility_number",unique = true)
     private String facilityNumber;
     @Column(name = "facility_name")
     private String facilityName;

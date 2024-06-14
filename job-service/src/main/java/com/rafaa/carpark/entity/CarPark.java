@@ -12,7 +12,8 @@ public class CarPark {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(name = "car_park_number",unique = true, nullable = false)
+//    @Column(name = "car_park_number",unique = true, nullable = false)
+    @Column(name = "car_park_number")
     private String carParkNumber;
     @Column(name = "timezone")
     private String timezone;

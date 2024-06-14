@@ -71,16 +71,17 @@ public class CapacityJob extends QuartzJobBean implements InterruptableJob{
 //        System.out.println(facility);
 //        System.out.println(facility.getFacilityName());
         List<Counter> counters = counterService.getAllCounterByFacilityId(JobServiceApplication.id);
-        List<Contingent> contingents = contingentService.getContingentsByCounterId(counters.get(0).getId());
-        Contingent contingent = contingents.get(0);
+//        List<Contingent> contingents = contingentService.getContingentsByCounterId(counters.get(0).getId());
+//        Contingent contingent = contingents.get(0);
 
         System.out.println(counters);
-        System.out.println(contingent);
+//        System.out.println(contingent);
 
 
         for(Counter c: counters){
             System.out.println(c);
-            c.setCapacity(contingent.getValue());
+//            c.setCapacity(contingent.getValue());
+            c.setCapacity(400);
             c.setAvailable(c.getCapacity());
             c.setOccupied(0);
             counterRepository.save(c);

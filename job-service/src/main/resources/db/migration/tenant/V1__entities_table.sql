@@ -1,7 +1,8 @@
 
 CREATE TABLE car_park (
     id UUID PRIMARY KEY,
-    car_park_number VARCHAR(255) NOT NULL UNIQUE,
+--    car_park_number VARCHAR(255) NOT NULL UNIQUE,
+    car_park_number VARCHAR(255),
     timezone VARCHAR(255),
     car_park_name VARCHAR(255)
 );
@@ -9,9 +10,11 @@ CREATE TABLE car_park (
 CREATE TABLE facility (
     id UUID PRIMARY KEY,
     car_park_id UUID REFERENCES car_park(id),
-    location_id VARCHAR(255) UNIQUE,
+--    location_id VARCHAR(255) UNIQUE,
+    location_id VARCHAR(255),
     facility_type VARCHAR(255),
-    facility_number VARCHAR(255) UNIQUE,
+--    facility_number VARCHAR(255) UNIQUE,
+    facility_number VARCHAR(255),
     facility_name VARCHAR(255),
     description TEXT,
     is_deleted BOOLEAN DEFAULT FALSE
@@ -29,11 +32,18 @@ CREATE TABLE counter (
 CREATE TABLE contingent (
     id UUID PRIMARY KEY,
     name VARCHAR(255),
-    value INTEGER,
-    start_date DATE,
-    end_date DATE,
-    day_of_week VARCHAR(255),
-    counter_id UUID REFERENCES counter(id)
+--    value INTEGER,
+    normal_value INTEGER,
+    weekend_value INTEGER,
+--    start_date DATE,
+--    end_date DATE,
+    start_date Date,
+    end_date Date,
+    start_day_of_week Date,
+    end_day_of_week Date,
+    car_park_id UUID,
+    facility_id UUID
+--    counter_id UUID REFERENCES counter(id)
 );
 
 CREATE TABLE shedlock(
