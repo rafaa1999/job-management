@@ -1,14 +1,12 @@
 package com.rafaa.facility.controller;
 
 import com.rafaa.facility.entity.Facility;
+import com.rafaa.facility.enums.FacilityType;
 import com.rafaa.facility.service.FacilityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +32,32 @@ public class FacilityRestController {
     public ResponseEntity<List<Facility>> getAllFacilities(){
         log.info("FacilityRestController.getAllFacilities()");
         return ResponseEntity.ok(facilityService.getAllFacilities());
+    }
+
+    @RequestMapping("/update/{id}")
+    public void updateFacility(@PathVariable UUID id, @RequestParam(name = "facilityName") String facilityName,
+                               @RequestParam(name = "facilityNumber") String facilityNumber,
+                               @RequestParam(name = "facilityType") String facilityType,
+                               @RequestParam(name = "locationId") String locationId,
+                               @RequestParam(name = "isDeleted", required = false) boolean isDeleted,
+                               @RequestParam(name = "description", required = false) String description){
+        log.info("FacilityRestController.updateFacility()");
+//        PARKING_LOTS,PARKING_GARAGES,PARK_AND_RIDE,VALET_PARKING,SMART_PARKING
+        FacilityType type = null;
+        if(facilityType.equals("PARKING_LOTS")){
+            type = FacilityType.PARKING_LOTS;
+        } else if (facilityType.equals("PARKING_GARAGES")) {
+            type = FacilityType.PARKING_GARAGES;
+        } else if (facilityType.equals("PARK_AND_RIDE")) {
+            type = FacilityType.PARK_AND_RIDE;
+        } else if (facilityType.equals("VALET_PARKING")) {
+            type = FacilityType.VALET_PARKING;
+        } else if (facilityType.equals("SMART_PARKING")) {
+            type = FacilityType.SMART_PARKING;
+        } else if (facilityType.isEmpty()) {
+            type = FacilityType.PARKING_LOTS;
+        }
+        facilityService.updateFacility(id,facilityName,facilityNumber,locationId,type,isDeleted,description);
     }
 
 }

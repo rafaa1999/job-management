@@ -8,16 +8,11 @@ import com.rafaa.carpark.entity.CarPark;
 import com.rafaa.facility.entity.Facility;
 import com.rafaa.facility.repository.FacilityRepository;
 import com.rafaa.job.dto.History;
+import com.rafaa.job.jobs.ExpirationJob;
+import com.rafaa.job.jobs.ResettingJob;
 import com.rafaa.multitenancy.context.TenantContextHolder;
-import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
+import org.quartz.*;
 import org.quartz.Trigger.TriggerState;
-import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,6 +106,14 @@ public class JobServiceImpl implements JobService{
 
         JobDetail jobDetail = JobUtil.createJob(jobClass, false, context, jobKey, groupKey);
 
+        JobDetail expirationJobDetail = JobBuilder.newJob(ExpirationJob.class)
+                .withIdentity(jobName + "_" + "expiration","SampleGroup")
+                .build();
+        Trigger expirationTrigger = TriggerBuilder.newTrigger()
+                .withIdentity(jobName + "_" + "expiration")
+                .startAt(JobServiceApplication.expirationDate)
+                .build();
+
         UUID facilityId = JobServiceApplication.facilityId;
         Facility facility = facilityRepository.findById(facilityId).get();
         CarPark carPark = facility.getCarPark();
@@ -125,6 +128,7 @@ public class JobServiceImpl implements JobService{
             Date dt = scheduler.scheduleJob(jobDetail, cronTriggerBean);
 //            JobsListener jobsListener = new JobsListener();
             scheduler.getListenerManager().addJobListener(jobsListener);
+            scheduler.scheduleJob(expirationJobDetail,expirationTrigger);
 //            History history = History.builder()
 //                    .jobName(jobName)
 //                    .build();

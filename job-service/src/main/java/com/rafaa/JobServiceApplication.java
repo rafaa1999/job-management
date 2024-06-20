@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -19,6 +20,8 @@ public class JobServiceApplication {
     public static UUID id;
     public static String tenant;
     public static UUID facilityId;
+    public static int failedCount = 0;
+    public static Date expirationDate = null;
     public static FacilityRepository facilityRepository;
     public static void main(String[] args) {
         SpringApplication.run(JobServiceApplication.class);

@@ -39,12 +39,18 @@ public class ContingentRestController {
     }
 
     @RequestMapping("/add")
-    public String addContingent(@RequestParam(name = "name") String name,
+    public boolean addContingent(@RequestParam(name = "name") String name,
                               @RequestParam(name = "normalDate") String normalDate,@RequestParam(name = "normalValue") Integer normalValue,
                               @RequestParam(name = "weekendDate") String weekendDate,@RequestParam(name = "weekendValue") Integer weekendValue,
                               @RequestParam(name = "carParkId") UUID carParkId,@RequestParam(name = "facilityId") UUID facilityId){
 
         log.info("ContingentRestController.addContingent()");
+
+        boolean checkContingentNameExistence = contingentService.checkContingentExist(name);
+
+        if(!checkContingentNameExistence){
+           return false;
+        }
 
         String[] normalDateList = normalDate.split("-");
         String[] weekendDateList = weekendDate.split("-");
@@ -93,7 +99,85 @@ public class ContingentRestController {
                                         startDayOfWeek,endDayOfWeek,weekendValue,
                                          carParkId,facilityId);
 
-        return "Contingent saved";
+        return true;
+    }
+
+    @RequestMapping("/check")
+    public boolean checkIfContingentExist(@RequestParam(name = "name") String name){
+        log.info("ContingentRestController.checkIfContingentExist()");
+        boolean check = contingentService.checkContingentExist(name);
+        return check;
+    }
+
+    @RequestMapping("/delete/{id}")
+    public void deleteContingent(@PathVariable(name = "id") UUID id){
+        log.info("ContingentRestController.deleteContingent()");
+        contingentService.deleteContingent(id);
+    }
+
+    @RequestMapping("/update/{id}")
+    public boolean updateContingent(@PathVariable(name = "id") UUID id,@RequestParam(name = "name") String name,
+                                 @RequestParam(name = "normalDate") String normalDate,@RequestParam(name = "normalValue") Integer normalValue,
+                                 @RequestParam(name = "weekendDate") String weekendDate,@RequestParam(name = "weekendValue") Integer weekendValue,
+                                 @RequestParam(name = "carParkId") UUID carParkId,@RequestParam(name = "facilityId") UUID facilityId){
+
+        log.info("ContingentRestController.addContingent()");
+
+        boolean checkContingentNameExistence = contingentService.checkContingentExist(name);
+
+        String[] normalDateList = normalDate.split("-");
+        String[] weekendDateList = weekendDate.split("-");
+
+        System.out.println("++++++++++++_=============");
+
+        for(String s: normalDateList){
+            System.out.println(s);
+        }
+
+        for(String s: weekendDateList){
+            System.out.println(s);
+        }
+
+        String StringStartDate = normalDateList[0];
+        System.out.println(StringStartDate);
+        String StringEndDate = normalDateList[1];
+
+        String StringStartDayOfWeek = weekendDateList[0];
+        String StringEndDayOfWeek = weekendDateList[1];
+
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendValue(ChronoField.YEAR, 4)
+                .appendLiteral('/')
+                .appendValue(ChronoField.MONTH_OF_YEAR)
+                .appendLiteral('/')
+                .appendValue(ChronoField.DAY_OF_MONTH)
+                .toFormatter();
+
+        LocalDate localStartDate = LocalDate.parse(StringStartDate,formatter);
+        LocalDate localEndDate = LocalDate.parse(StringEndDate,formatter);
+
+        LocalDate localStartDayOfWeek = LocalDate.parse(StringStartDayOfWeek,formatter);
+        LocalDate localEndDayOfWeek = LocalDate.parse(StringEndDayOfWeek,formatter);
+
+        Date startDate = Date.from(localStartDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(localEndDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        Date startDayOfWeek = Date.from(localStartDayOfWeek.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date endDayOfWeek = Date.from(localEndDayOfWeek.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        // TODO: write condition for the date
+
+        contingentService.updateContingent(id,name,startDate,endDate,normalValue,
+                startDayOfWeek,endDayOfWeek,weekendValue,
+                carParkId,facilityId);
+
+        return true;
+    }
+
+    @RequestMapping("/contingent/{id}")
+    public Contingent getContingent(@PathVariable(name = "id") UUID id){
+        log.info("ContingentRestController.getContingent()");
+        return contingentService.getContingent(id);
     }
 
 }

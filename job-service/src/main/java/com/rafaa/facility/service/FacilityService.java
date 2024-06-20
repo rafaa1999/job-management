@@ -1,6 +1,7 @@
 package com.rafaa.facility.service;
 
 import com.rafaa.facility.entity.Facility;
+import com.rafaa.facility.enums.FacilityType;
 import com.rafaa.facility.exception.FacilityNotFoundException;
 import com.rafaa.facility.repository.FacilityRepository;
 import org.slf4j.Logger;
@@ -42,6 +43,22 @@ public class FacilityService {
         List<Facility> facilities = facilityRepository.findAll();
         log.info("Returning all facilities: {}", facilities);
         return facilities;
+    }
+
+    public void updateFacility(UUID id, String facilityName, String facilityNumber,
+                               String locationId, FacilityType type, boolean isDeleted, String description) {
+        Facility facility = facilityRepository.findById(id).get();
+        facility.setFacilityName(facilityName);
+        facility.setFacilityNumber(facilityNumber);
+        facility.setLocationId(locationId);
+        facility.setFacilityType(type);
+        facility.setDeleted(isDeleted);
+        if(!description.isEmpty() || description != null){
+            facility.setDescription(description);
+        }
+        System.out.println("#)($*#$%$*#&$&##$#$");
+        System.out.println(facility);
+        facilityRepository.save(facility);
     }
 
 }

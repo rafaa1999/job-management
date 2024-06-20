@@ -1,7 +1,9 @@
 package com.rafaa.job.jobs;
 
+import com.rafaa.JobServiceApplication;
 import com.rafaa.facility.repository.FacilityRepository;
 import com.rafaa.job.service.JobService;
+import com.rafaa.multitenancy.context.TenantContextHolder;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.quartz.InterruptableJob;
 import org.quartz.JobExecutionContext;
@@ -21,6 +23,12 @@ public class ExpirationJob extends QuartzJobBean implements InterruptableJob{
     @Override
     @SchedulerLock(name = "ExpirationJob", lockAtMostFor = "15s", lockAtLeastFor = "15s")
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+        TenantContextHolder.setTenantIdentifier(JobServiceApplication.tenant);
+        String expirationDate = context.getJobDetail().getKey().getName();
+        String[] tabs = expirationDate.split("_");
+        String jobName = tabs[0] + "_" + tabs[1] + "_" + tabs[2];
+        jobService.pauseJob(jobName);
+        jobService.deleteJob(expirationDate);
     }
 
     @Override

@@ -14,7 +14,6 @@ import java.util.UUID;
 public class ContingentService {
 
     private static final Logger log = LoggerFactory.getLogger(ContingentService.class);
-
     private final ContingentRepository contingentRepository;
 
     public ContingentService(ContingentRepository contingentRepository) {
@@ -53,4 +52,37 @@ public class ContingentService {
         log.info("Contingent with the name: {} has been successfully saved",contingent.getName());
     }
 
+    public boolean checkContingentExist(String name){
+        log.info("ContingentService.checkContingentExist()");
+        List<Contingent> contingents = contingentRepository.findByName(name);
+        return contingents.size() > 0 ? false : true;
+    }
+
+    public void deleteContingent(UUID id) {
+        log.info("ContingentService.deleteContingent()");
+        contingentRepository.deleteById(id);
+    }
+
+    public void updateContingent(UUID id, String name,
+                                 Date startDate, Date endDate, Integer normalValue,
+                                 Date startDayOfWeek, Date endDayOfWeek, Integer weekendValue,
+                                 UUID carParkId, UUID facilityId) {
+        log.info("ContingentService.updateContingent()");
+        Contingent contingent = contingentRepository.findById(id).get();
+        contingent.setName(name);
+        contingent.setStartDate(startDate);
+        contingent.setEndDate(endDate);
+        contingent.setNormalValue(normalValue);
+        contingent.setStartDayOfWeek(startDayOfWeek);
+        contingent.setEndDayOfWeek(endDayOfWeek);
+        contingent.setWeekendValue(weekendValue);
+        contingent.setCarParkId(carParkId);
+        contingent.setFacilityId(facilityId);
+        contingentRepository.save(contingent);
+    }
+
+    public Contingent getContingent(UUID id) {
+        log.info("ContingentService.getContingent()");
+        return contingentRepository.findById(id).get();
+    }
 }

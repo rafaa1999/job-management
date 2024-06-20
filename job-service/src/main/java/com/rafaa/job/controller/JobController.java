@@ -81,6 +81,8 @@ public class JobController {
         JobServiceApplication.tenant = tenantId;
         JobServiceApplication.facilityId = id;
 
+        JobServiceApplication.expirationDate = expirationTime;
+
         CarPark carPark = facilityRepository.findById(id).get().getCarPark();
 //        3B82F6
 

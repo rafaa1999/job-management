@@ -12,4 +12,5 @@ import java.util.UUID;
 public interface ContingentRepository extends JpaRepository<Contingent,UUID> {
 //    @Query("SELECT c FROM Contingent c WHERE c.counter.id = :counterId")
 //    List<Contingent> getContingentsByCounterId(UUID counterId);
+    List<Contingent> findByName(String name);
 }
