@@ -1,5 +1,9 @@
 package com.rafaa.facility.service;
 
+import com.rafaa.carpark.entity.CarPark;
+import com.rafaa.carpark.repository.CarParkRepository;
+import com.rafaa.counter.entity.Counter;
+import com.rafaa.counter.repository.CounterRepository;
 import com.rafaa.facility.entity.Facility;
 import com.rafaa.facility.enums.FacilityType;
 import com.rafaa.facility.exception.FacilityNotFoundException;
@@ -17,9 +21,13 @@ public class FacilityService {
 
     private static final Logger log = LoggerFactory.getLogger(FacilityService.class);
     private final FacilityRepository facilityRepository;
+    private final CounterRepository counterRepository;
+    private final CarParkRepository carParkRepository;
 
-    public FacilityService(FacilityRepository facilityRepository) {
+    public FacilityService(FacilityRepository facilityRepository, CounterRepository counterRepository, CarParkRepository carParkRepository) {
         this.facilityRepository = facilityRepository;
+        this.counterRepository = counterRepository;
+        this.carParkRepository = carParkRepository;
     }
 
     public List<Facility> getFacilitiesByCarParkId(UUID car_park_id){
@@ -61,4 +69,66 @@ public class FacilityService {
         facilityRepository.save(facility);
     }
 
+    public void addFacility(String facilityName, String facilityNumber, String locationId,
+                            FacilityType type, Integer reservedCapacity, Integer nonReservedCapacity, Integer preBooked, UUID id) {
+
+        CarPark carPark = carParkRepository.findById(id).get();
+
+        Facility facility = Facility.builder()
+                .carPark(carPark)
+                .facilityType(type)
+                .facilityName(facilityName)
+                .facilityNumber(facilityNumber)
+                .locationId(locationId)
+                .build();
+
+        facilityRepository.save(facility);
+
+        Counter reserved_counter = Counter.builder()
+                .facility(facility)
+                .category("Reserved")
+                .capacity(reservedCapacity)
+                .occupied(reservedCapacity / 2)
+                .available(reservedCapacity / 2)
+                .build();
+        Counter non_reserved_counter = Counter.builder()
+                .facility(facility)
+                .category("Non_Reserved")
+                .capacity(nonReservedCapacity)
+                .occupied(nonReservedCapacity / 2)
+                .available(nonReservedCapacity / 2)
+                .build();
+        Counter pre_booked_counter = Counter.builder()
+                .facility(facility)
+                .category("Pre_booked")
+                .capacity(preBooked)
+                .occupied(preBooked / 2)
+                .available(preBooked / 2)
+                .build();
+        Counter physical_counter = Counter.builder()
+                .facility(facility)
+                .category("Physical")
+                .capacity(preBooked + reservedCapacity + nonReservedCapacity)
+                .occupied( (preBooked / 2) + (reservedCapacity / 2) + (nonReservedCapacity / 2) )
+                .available( (preBooked / 2) + (reservedCapacity / 2) + (nonReservedCapacity / 2) )
+                .build();
+
+        List<Counter> counters = List.of(reserved_counter,non_reserved_counter,pre_booked_counter,physical_counter);
+
+        counterRepository.saveAll(counters);
+
+        log.info("this is facility added: {}",facility);
+        log.info("this is counter added: {}",counters);
+    }
+
+    public void deleteFacility(UUID id) {
+        Facility facility = facilityRepository.findById(id).get();
+        List<Counter> counters = counterRepository.findAll();
+        for(Counter c: counters){
+            if(c.getFacility().getId() == facility.getId()){
+                counterRepository.deleteById(c.getId());
+            }
+        }
+        facilityRepository.deleteById(id);
+    }
 }

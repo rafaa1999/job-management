@@ -60,4 +60,42 @@ public class FacilityRestController {
         facilityService.updateFacility(id,facilityName,facilityNumber,locationId,type,isDeleted,description);
     }
 
+    @RequestMapping("/add/{id}")
+    public void addFacility( @PathVariable(name = "id") UUID id,
+                             @RequestParam(name = "facilityName") String facilityName,
+                             @RequestParam(name = "facilityNumber") String facilityNumber,
+                             @RequestParam(name = "facilityType") String facilityType,
+                             @RequestParam(name = "locationId") String locationId,
+                             @RequestParam(name = "reservedCapacity") Integer reservedCapacity,
+                             @RequestParam(name = "nonReservedCapacity") Integer nonReservedCapacity,
+                             @RequestParam(name = "preBooked") Integer preBooked
+                             ){
+//        reservedCapacity:this.facilityAddForm.value.reservedCapacity,
+//                nonReservedCapacity:this.facilityAddForm.value.nonReservedCapacity,
+//                preBooked:this.facilityAddForm.value.preBooked
+        log.info("FacilityRestController.addFacility()");
+//        PARKING_LOTS,PARKING_GARAGES,PARK_AND_RIDE,VALET_PARKING,SMART_PARKING
+        FacilityType type = null;
+        if(facilityType.equals("PARKING_LOTS")){
+            type = FacilityType.PARKING_LOTS;
+        } else if (facilityType.equals("PARKING_GARAGES")) {
+            type = FacilityType.PARKING_GARAGES;
+        } else if (facilityType.equals("PARK_AND_RIDE")) {
+            type = FacilityType.PARK_AND_RIDE;
+        } else if (facilityType.equals("VALET_PARKING")) {
+            type = FacilityType.VALET_PARKING;
+        } else if (facilityType.equals("SMART_PARKING")) {
+            type = FacilityType.SMART_PARKING;
+        } else if (facilityType.isEmpty()) {
+            type = FacilityType.PARKING_LOTS;
+        }
+        facilityService.addFacility(facilityName,facilityNumber,locationId,type,reservedCapacity,nonReservedCapacity,preBooked,id);
+    }
+
+    @RequestMapping("/delete/{id}")
+    public void deleteFacility( @PathVariable(name = "id") UUID id ){
+        log.info("FacilityRestController.deleteFacility()");
+        facilityService.deleteFacility(id);
+    }
+
 }
